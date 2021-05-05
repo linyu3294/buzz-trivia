@@ -1,0 +1,4 @@
+include ':spotify-remote'
+include ':spotify-auth'
+include ':app'
+rootProject.name = "Buzz Trivia"
