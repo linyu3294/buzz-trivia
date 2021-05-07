@@ -9,12 +9,12 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 import java.io.Serializable;
 
 public class SingletonRemote implements Serializable {
-    private static final int REQUEST_CODE = 1337;
     private static final String REDIRECT_URI = "http://localhost/";
-    private static SpotifyAppRemote mSpotifyAppRemote;
+    private static SpotifyAppRemote mSpotifyAppRemote = null;
     private static String clientID = "1500462005314b4ab175dce1bf67f31e";
 
     public static SpotifyAppRemote getSpotifyRemote (Context context) {
+
         if (mSpotifyAppRemote == null){
             ConnectionParams connectionParams =
                     new ConnectionParams.Builder(clientID)
@@ -37,6 +37,7 @@ public class SingletonRemote implements Serializable {
                         }
                     });
         }
+        System.out.println("checkpoint" + mSpotifyAppRemote);
         return mSpotifyAppRemote;
     }
 }

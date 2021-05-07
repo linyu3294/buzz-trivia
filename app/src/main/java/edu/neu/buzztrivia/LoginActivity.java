@@ -13,7 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import edu.neu.buzztrivia.model.User;
-import edu.neu.buzztrivia.model.UserService;
+import edu.neu.buzztrivia.services.UserService;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -39,19 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-//        AuthorizationRequest.Builder builder =
-//                new AuthorizationRequest.Builder(clientID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
-//
-//        builder.setScopes(new String[]{"streaming"});
-//        AuthorizationRequest request = builder.build();
-//
-//        AuthorizationClient.openLoginActivity(this, REQUEST_CODE, request);
         authenticateSpotify();
         msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(this);
-//        waitForUserInfo();
-//        goToTrivia();
     }
 
     @Override
@@ -106,19 +96,19 @@ public class LoginActivity extends AppCompatActivity {
     private void waitForUserInfo() {
         UserService userService = new UserService(queue, msharedPreferences);
         userService.get(() -> {
-            User user = userService.getUser();
+            User user = userService.getSpotifyUser();
             editor = getSharedPreferences("SPOTIFY", 0).edit();
             editor.putString("userid", user.id);
             System.out.println("STARTING, GOT USER INFORMATION");
             // We use commit instead of apply because we need the information stored immediately
             editor.commit();
-            goToTrivia();
+            goToSettings();
         });
     }
 
 
-    public void goToTrivia() {
-        Intent intent = new Intent(this, TriviaActivity.class);
+    public void goToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
 //        intent.putExtra("trivia", Trivia);
         startActivity(intent);
     }

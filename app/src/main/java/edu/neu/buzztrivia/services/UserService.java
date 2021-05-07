@@ -1,4 +1,4 @@
-package edu.neu.buzztrivia.model;
+package edu.neu.buzztrivia.services;
 
 import android.content.SharedPreferences;
 
@@ -10,9 +10,11 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.neu.buzztrivia.model.User;
+
 public class UserService {
 
-    private static final String ENDPOINT = "https://api.spotify.com/v1/me";
+    private static final String USER_ENDPOINT = "https://api.spotify.com/v1/me";
     private SharedPreferences msharedPreferences;
     private RequestQueue mqueue;
     private User user;
@@ -22,18 +24,21 @@ public class UserService {
         msharedPreferences = sharedPreferences;
     }
 
-    public User getUser() {
+    public User getSpotifyUser() {
         return user;
     }
 
-    public void get(final VolleyCallBack callBack) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
-            Gson gson = new Gson();
-            user = gson.fromJson(response.toString(), User.class);
-            callBack.onSuccess();
-        }, error -> get(() -> {
-
-        })) {
+    public void get(final IVolleyCallBack callBack) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                USER_ENDPOINT,
+                null,
+                response -> {
+                    Gson gson = new Gson();
+                    user = gson.fromJson(response.toString(), User.class);
+                    callBack.onSuccess();
+                }, error -> get(() -> {
+        }))
+        {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
